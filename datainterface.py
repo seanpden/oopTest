@@ -15,46 +15,46 @@ class DataInterface:
         '''
         Initialises empty data, empty features, empty labels
         '''
-        self.data = ""
-        self.features = ""
-        self.labels = ""
+        self._data = ""
+        self._features = ""
+        self._labels = ""
 
     def getdata(self):
         '''
         gets dataset
         '''
-        print(self.data)
-        return self.data
+        print(self._data)
+        return self._data
     
     def setdata(self, data):
         '''
         sets dataset
         '''
-        self.data = data
+        self._data = data
 
     def getfeatures(self):
-        print(self.features)
-        return self.features
+        print(self._features)
+        return self._features
 
     def setfeatures(self, features):
-        self.features = features
+        self._features = features
 
     def getlabels(self):
-        print(self.labels)
-        return self.labels
+        print(self._labels)
+        return self._labels
     
     def split_by_cyto(self):
         '''
         Splits data into preset features and labels from cytometry. Returns features, labels.
         '''
-        self.features = pd.DataFrame(self.data, columns=['Events | Median (HLA DR-FITC)',
+        self._features = pd.DataFrame(self._data, columns=['Events | Median (HLA DR-FITC)',
        'Events | Median (CD117-PE)', 'Events | Median (CD45-ECD)',
        'Events | Median (CD34-PC5)', 'Events | Median (CD38-PC7)',
        'Events | Median (FS Lin)', 'Events | Median (SS Log)'])
 
-        self.labels = pd.DataFrame(self.data, columns=['AML?'])
+        self._labels = pd.DataFrame(self._data, columns=['AML?'])
 
-        return self.features, self.labels
+        return self._features, self._labels
 
     def gauss_naive_bayes(self, features, labels, testsize=0.25, randomstate=53):
         '''
