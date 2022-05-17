@@ -2,6 +2,7 @@
 # ------------------------------------------------------------
 from pyexpat import features
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
@@ -58,11 +59,15 @@ class DataInterface:
 
     def gauss_naive_bayes(self, features, labels, testsize=0.25, randomstate=53):
         '''
-        Performs Gaussian Naive Bayes algorithm with inputed training and testing sets. Returns f1_score, cross validation score
+        Performs Gaussian Naive Bayes algorithm with inputed training and testing sets. 
+        Returns f1_score, cross validation score
 
         PARAMETERS:
-        split_by_cyto: the return values of split_by_cyto \n
+        features: the feature return value of split_by_cyto \n
+        labels: the label return value of split_by_cyto \n
         test_size: float or int, default = 0.25 \n
+        If float, should be between 0.0 and 1.0 and represent the proportion of the dataset to include in the test split. \n
+        If int, represents the absolute number of test samples.
         random_state: int, default 53
         '''
 
@@ -72,7 +77,30 @@ class DataInterface:
         gnb.fit(X_train, y_train.values.ravel())
         y_pred = gnb.predict(X_test)
 
-        print(y_test)
-        print(y_pred)
+        # print(y_test)
+        # print(y_pred)
         return f1_score(y_test, y_pred), gnb.score(X_test, y_test)
 
+    def forest_random_tree(self, features, labels, testsize=0.25, randomstate=53):
+        '''
+        Performs the RandomForest algorithm with the training and testing sets,
+        Returns the f1_score, cross validation score.
+
+        PARAMETERS:
+        features: the feature return value of split_by_cyto \n
+        labels: the label return value of split_by_cyto \n
+        test_size: float or int, default = 0.25 \n
+        If float, should be between 0.0 and 1.0 and represent the proportion of the dataset to include in the test split. \n
+        If int, represents the absolute number of test samples.
+        random_state: int, default 53
+        '''
+
+        X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=testsize, random_state=randomstate)
+
+        clf = RandomForestClassifier(n_estimators=100)
+        clf.fit(X_train, y_train.values.ravel())
+        y_pred = clf.predict(X_test)
+
+        # print(y_test)
+        # print(y_pred)
+        return f1_score(y_test, y_pred), clf.score(X_test, y_test)
