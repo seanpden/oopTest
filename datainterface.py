@@ -14,13 +14,13 @@ class DataInterface:
     '''
     Class that handles splitting data and contains all algorithm actions
     '''
-    def __init__(self):
+    def __init__(self, _data="", _features="", _labels=""):
         '''
         Initialises empty data, empty features, empty labels
         '''
-        self._data = ""
-        self._features = ""
-        self._labels = ""
+        self._data = _data
+        self._features = _features
+        self._labels = _labels
 
     def getdata(self):
         '''
