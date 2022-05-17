@@ -4,8 +4,10 @@ from pyexpat import features
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
+from sklearn import tree
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
+import matplotlib.pyplot as plt
 # ------------------------------------------------------------
 
 class DataInterface:
@@ -57,7 +59,7 @@ class DataInterface:
 
         return self._features, self._labels
 
-    def gauss_naive_bayes(self, features, labels, testsize=0.25, randomstate=53):
+    def gauss_naive_bayes(self, _features, _labels, testsize=0.25, randomstate=53):
         '''
         Performs Gaussian Naive Bayes algorithm with inputed training and testing sets. 
         Returns f1_score, cross validation score
@@ -71,7 +73,7 @@ class DataInterface:
         random_state: int, default 53
         '''
 
-        X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=testsize, random_state=randomstate)
+        X_train, X_test, y_train, y_test = train_test_split(_features, _labels, test_size=testsize, random_state=randomstate)
         
         gnb = GaussianNB()
         gnb.fit(X_train, y_train.values.ravel())
@@ -81,7 +83,7 @@ class DataInterface:
         # print(y_pred)
         return f1_score(y_test, y_pred), gnb.score(X_test, y_test)
 
-    def forest_random_tree(self, features, labels, testsize=0.25, randomstate=53):
+    def forest_random_tree(self, _features, _labels, testsize=0.25, randomstate=53):
         '''
         Performs the RandomForest algorithm with the training and testing sets,
         Returns the f1_score, cross validation score.
@@ -95,7 +97,7 @@ class DataInterface:
         random_state: int, default 53
         '''
 
-        X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=testsize, random_state=randomstate)
+        X_train, X_test, y_train, y_test = train_test_split(_features, _labels, test_size=testsize, random_state=randomstate)
 
         clf = RandomForestClassifier(n_estimators=100)
         clf.fit(X_train, y_train.values.ravel())
@@ -104,3 +106,22 @@ class DataInterface:
         # print(y_test)
         # print(y_pred)
         return f1_score(y_test, y_pred), clf.score(X_test, y_test)
+
+    def decision_tree(self, _features, _labels, show=False):
+        '''
+        Calculates and outputs a PNG of a decision tree classifying algorithm
+
+        PARAMETERS:
+        _features: the feature return value of split_by_cyto \n
+        _labels: the label return value of split_by_cyto \n
+        show: boolean, show plot on screen
+        '''
+
+        plt.figure(dpi=200)
+        clf = tree.DecisionTreeClassifier().fit(_features, _labels)
+        tree.plot_tree(clf, filled=True)
+        plt.title("Decision tree with all features")
+        plt.savefig("decision_tree_output")
+
+        if show == True:
+            plt.show()

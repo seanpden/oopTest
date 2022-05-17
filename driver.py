@@ -1,5 +1,6 @@
 # IMPORT:
 # ------------------------------------------------------------
+from re import X
 import datainterface
 import pandas as pd
 # ------------------------------------------------------------
@@ -28,3 +29,6 @@ y = di.forest_random_tree(features, labels, randomstate=51)
 # prints forest random tree
 print(y)
 
+# performs decision tree algo on features and labels, stores PNG in folder,
+# doesn't show result in window
+x = di.decision_tree(features, labels, False)
